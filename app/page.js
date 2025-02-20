@@ -50,8 +50,7 @@ export default function Home() {
   const [showSettings, setShowSettings] = useState(false);
 
   const [fontSize, setFontSize] = useState(2); // in rem
-  const [containerSize, setContainerSize] = useState(100); // in percentage
-  const [shadowSize, setShadowSize] = useState(10); // in pixels
+
 
 
   const backgrounds = ["--secondary-color", "--saffron", "--black-bean", "--bittersweet"];
@@ -82,11 +81,11 @@ export default function Home() {
         return `0 0 15px var(--primary-color), inset 0 0 10px var(--primary-color)`;
       case 'shadow':
       case 'default':
-        return `0 ${shadowSize}px ${shadowSize * 3}px rgba(0,0,0,0.3)`;
+        return `0 10px 30px rgba(0,0,0,0.3)`; // Fixed shadow size
       default:
-        return `0 ${shadowSize}px ${shadowSize * 3}px rgba(0,0,0,0.3)`;
+        return `0 10px 30px rgba(0,0,0,0.3)`;
     }
-  }, [visualEffect, shadowSize]);
+  }, [visualEffect]);
 
   useEffect(() => {
     setIsMounted(true);
@@ -112,8 +111,7 @@ export default function Home() {
         setVisualEffect(parsedPreferences.visualEffect);
 
         setFontSize(parsedPreferences.fontSize ?? 2);
-        setContainerSize(parsedPreferences.containerSize ?? 100);
-        setShadowSize(parsedPreferences.shadowSize ?? 10);
+
       }
     }
   }, [isMounted]);
@@ -128,12 +126,11 @@ export default function Home() {
         borderWidth,
         visualEffect,
         fontSize,
-        containerSize,
-        shadowSize,
+
       };
       localStorage.setItem('clockPreferences', JSON.stringify(preferences));
     }
-  }, [clockFont, clockShape, primaryColor, borderColor, borderWidth, visualEffect, fontSize, containerSize, shadowSize, isMounted]);
+  }, [clockFont, clockShape, primaryColor, borderColor, borderWidth, visualEffect, fontSize,  isMounted]);
 
   const handleFontSizeChange = (e) => {
     setFontSize(parseFloat(e.target.value));
@@ -185,20 +182,18 @@ return (
     <main className="container">
       {isMounted && time ? (
         <div
-          className={`clock-container ${clockShape} ${
-            visualEffect === 'vintage' ? 'vintage' : ''
-          }`}
-          style={{
-            background: `var(${clockBackground})`,
-            '--primary-color': primaryColor,
-            '--border-color': borderColor,
-            fontFamily: clockFont,
-            border: `${borderWidth}px solid ${borderColor}`,
-            width: `${containerSize}%`,
-            height: clockShape === 'circle' ? `${containerSize}%` : 'auto',
-            boxShadow: getBoxShadow(),
-          }}
-        >
+        className={`clock-container ${clockShape} ${
+          visualEffect === 'vintage' ? 'vintage' : ''
+        }`}
+        style={{
+          background: `var(${clockBackground})`,
+          '--primary-color': primaryColor,
+          '--border-color': borderColor,
+          fontFamily: clockFont,
+          border: `${borderWidth}px solid ${borderColor}`,
+          boxShadow: getBoxShadow(),
+        }}
+      >
           <div
             className="clock"
             style={{ 
@@ -251,9 +246,7 @@ return (
           >
             ×
           </button>
-          <button className="fullscreen-button" onClick={toggleFullScreen} aria-label="Toggle fullscreen">
-            ⛶
-          </button>
+         
           <div className="customization-buttons">
             <button onClick={() => setClockFont(fonts[Math.floor(Math.random() * fonts.length)])} aria-label="Change font">𝖠b</button>
             <button
@@ -316,6 +309,9 @@ return (
             <button onClick={resetSettings} aria-label="Reset settings">
               🔄 Reset
             </button>
+            <button className="fullscreen-button" onClick={toggleFullScreen} aria-label="Toggle fullscreen">
+            ⛶
+          </button>
 
           </div>
 
@@ -324,25 +320,25 @@ return (
 
           <div className="customization-buttons">
           <div className="slider-container">
-            <label htmlFor="border-width">Border: {borderWidth}px</label>
+            <label htmlFor="border-width">{borderWidth}px</label>
             <input
               type="range"
               id="border-width"
               min="1"
-              max="15"
+              max="12"
               value={borderWidth}
               onChange={handleBorderWidthChange}
             />
           </div>
 
           <div className="slider-container">
-            <label htmlFor="font-size">Font Size: {fontSize}rem</label>
+            <label htmlFor="font-size">{fontSize}rem</label>
             <input
               type="range"
               id="font-size"
               min="1"
-              max="6"
-              step="0.1"
+              max="4"
+              step="0.2"
               value={fontSize}
               onChange={handleFontSizeChange}
             />
