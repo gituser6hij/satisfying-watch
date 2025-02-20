@@ -1,326 +1,344 @@
-/* ===== CSS Variables ===== */
 :root {
-  /* Colors */
-  --primary-color: #ffb74d;
-  --primary-color-dark: #F59300;
-  --secondary-color: #1a1a1a;
-  --background-color: #0D0B07;
-  --text-color-light: #ffffff;
-  --matrix-green: #00ff00;
-
-  /* Additional colors pallette */
-  /* CSS HEX */
-  --drab-dark-brown: #363020ff;
-  --walnut-brown: #605c4eff;
-  --white: #ffffffff;
-  --hunyadi-yellow: #ffb74dff;
-  --burnt-sienna: #d7816aff;
-
-
-  /* Spacing */
-  --base-spacing: 15px;
-  --container-padding: 30px;
-
-  /* Typography */
-  --font-monospace: monospace;
-  --font-ui: Arial, sans-serif;
-  --font-matrix: 'Courier New', monospace;
-
-  /* Borders */
-  --base-border-radius: 15px;
-  --button-border-radius: 5px;
-
-  /* Transitions */
-  --base-transition: all 0.3s ease;
+  --primary-color: #c678dd;
+  --secondary-color: #282c34;
+  --background-color: #1e2127;
+  --border-color: #3a3f4b;
+  --border-width: 4px;
+  --base-transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ===== Base Styles ===== */
+/* Base Styles */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-}
-
-body {
-  background-color: var(--background-color);
-  color: var(--primary-color);
-  font-family: var(--font-monospace);
-}
-
-/* ===== Layout Styles ===== */
-.container {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-
-.button-container {
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  z-index: 100;
-}
-
-/* ===== Component Styles ===== */
-/* Clock Container */
-.clock-container {
-  position: relative;
-  /* Ensure absolute positioning inside works */
-  background-color: var(--secondary-color);
-  padding: var(--container-padding);
-  border-radius: var(--base-border-radius);
-  text-align: center;
-  max-width: 600px;
-  width: 100%;
   transition: var(--base-transition);
 }
 
-/* Clock Elements */
+body {
+  background: var(--background-color);
+  color: var(--primary-color);
+  font-family: monospace;
+}
+
+.container {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.clock-container {
+  overflow: hidden;  /* As a fallback */
+
+  background: var(--secondary-color);
+  padding: clamp(1rem, 4vw, 2rem); /* Responsive padding */
+  border: var(--border-width) solid var(--border-color);
+  border-radius: 15px;
+  width: min(90vw, 600px);
+  transition: 
+    border-radius 0.4s ease,
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+/* Shape Variations */
+.square {
+  border-radius: 15px;
+}
+.circle {
+  border-radius: 50%;
+  width: min(60vw, 400px);  /* Keep this for consistency */
+  height: min(60vw, 400px); /* Matches width for perfect circle */
+  max-width: 400px;         /* Cap the size */
+  max-height: 400px;
+  padding: clamp(1rem, 4vw, 2rem); /* Responsive padding */
+  box-sizing: border-box;   /* Include padding and border in size */
+  overflow: hidden;         /* Prevent any overflow */
+}
+
+/* Visual Effects */
+.shadow { box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+.glow { box-shadow: 0 0 30px var(--primary-color); }
+.neon { 
+  border-width: 2px;
+  box-shadow: 0 0 15px var(--primary-color),
+              inset 0 0 10px var(--primary-color);
+}
+.vintage {
+  filter: sepia(0.4) contrast(1.2);
+  border-style: double;
+}
+
+/* Time Elements */
 .clock {
   display: flex;
   justify-content: center;
-  align-items: center;
-  font-size: 4rem;
+  gap: 0.5rem;
+  font-size: clamp(2rem, 8vw, 4rem);
+  margin-bottom: 1rem;
+  letter-spacing: 0.05em;
 }
 
 .digit {
   display: inline-block;
-  width: 1.1em;
+  min-width: 1.2em;
   text-align: center;
 }
 
 .date {
-  font-size: 1.5rem;
-  margin-top: var(--base-spacing);
+  font-size: clamp(1rem, 3vw, 1.25rem);
+  margin-bottom: 1.5rem;
+  opacity: 0.9;
+  text-align: center;
 }
 
-/* Buttons */
-.button {
-  padding: 4px 8px;
-  border: none;
-  border-radius: var(--button-border-radius);
+/* Customization Buttons */
+.customization-buttons {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+/* Adjusted Fullscreen Button */
+.fullscreen-button {
+  background: rgba(255,255,255,0.1);
+  border: 2px solid var(--border-color);
+  color: var(--primary-color);
+  padding: 0.8rem;
   cursor: pointer;
-  transition: var(--base-transition);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 30px;
-  height: 30px;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  margin-top: 1rem;
 }
 
+.fullscreen-button:hover {
+  background: rgba(255,255,255,0.2);
+  transform: translateY(-2px);
+}
 
+/* Rest of the styles remain unchanged */
+.customization-buttons button {
+  background: rgba(255,255,255,0.1);
+  border: 2px solid var(--border-color);
+  color: var(--primary-color);
+  padding: 0.8rem;
+  cursor: pointer;
+  border-radius: 8px;
+  font-size: 1.2rem;
+}
+
+.customization-buttons button:hover {
+  background: rgba(255,255,255,0.2);
+  transform: translateY(-2px);
+}
+
+/* Slider Style */
+.slider-container {
+  margin-top: 1rem;
+  text-align: center;
+  color: var(--primary-color);
+}
+
+.slider-container label {
+  font-size: 1rem;
+  display: block;
+}
+
+.slider-container input {
+  width: 100%;
+  -webkit-appearance: none;
+  background: var(--border-color);
+  height: 5px;
+  border-radius: 5px;
+  outline: none;
+  margin-top: 5px;
+}
+
+.slider-container input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 15px;
+  height: 15px;
+  background: var(--primary-color);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.slider-container input::-moz-range-thumb {
+  width: 15px;
+  height: 15px;
+  background: var(--primary-color);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* Settings Button */
+.settings-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid var(--border-color);
+  color: var(--primary-color);
+  padding: 0.8rem;
+  cursor: pointer;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  z-index: 1000;
+  transition: var(--base-transition);
+}
+
+.settings-button:hover::after {
+  content: "Custumise it ^^";
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--secondary-color);
+  color: var(--primary-color);
+  padding: 0.3rem 0.6rem;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  
+}
+
+/* Settings Panel */
+.settings-panel {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  background: var(--secondary-color);
+  border: var(--border-width) solid var(--border-color);
+  border-radius: 15px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  z-index: 999;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  animation: slide-up 0.3s ease;
+}
+
+.settings-panel .customization-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.8rem;
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Adjust fullscreen button in panel */
+.settings-panel .fullscreen-button {
+  width: 100%;
+  margin-top: 0;
+}
+
+/* Adjust slider in panel */
+.settings-panel .slider-container {
+  width: 200px;
+  margin: 0;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.close-button:hover {
+  opacity: 0.8;
+}
 
 /* Animations */
 @keyframes blink-animation {
-  from {
-    opacity: 1;
-  }
-
-  to {
-    opacity: 0;
-  }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
 }
 
 .blink {
-  animation: blink-animation 6s infinite alternate;
+  animation: blink-animation 1.5s infinite;
 }
 
-/* ===== Design Variations ===== */
-/* Design 1 - Default Theme */
-.design-1 {
-  border: 4px solid #333;
-  box-shadow: 0px 0px 15px rgba(255, 183, 77, 0.2);
-}
-
-/* Design 2 - Train Station */
-.design-2 {
-  background-color: #2b2b2b;
-  border: 8px solid #4a4a4a;
-  border-radius: 50%;
-  width: 400px;
-  height: 400px;
-  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5),
-    0 0 30px rgba(255, 255, 255, 0.1);
-  /* Fixed height to ensure perfect circle */
-  padding: 0;
-  /* Remove padding */
-  position: relative;
-  /* For absolute positioning of content */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.design-2 .clock {
-  font-family: var(--font-ui);
-  font-weight: bold;
-  color: var(--text-color-light);
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-.design-2 .date {
-  font-family: var(--font-ui);
-  color: #cccccc;
-  font-size: 1.1rem;
-}
-
-/* Design 3 - Matrix Theme */
-.design-3 {
-  background-color: transparent;
-  border: 2px solid var(--matrix-green);
-  box-shadow: 0 0 20px var(--matrix-green);
-}
-
-.design-3 .clock {
-  font-family: var(--font-matrix);
-  color: var(--matrix-green);
-  text-shadow: 0 0 10px var(--matrix-green);
-}
-
-.design-3 .date {
-  font-family: var(--font-matrix);
-  color: var(--matrix-green);
-  text-shadow: 0 0 5px var(--matrix-green);
-}
-
-/* ===== Media Queries ===== */
-@media (max-width: 500px) {
-  .design-2 {
-    width: 300px;
-    height: 300px;
+@media (min-width: 769px) {
+  .circle {
+    width: min(50vw, 450px);  /* Slightly larger but controlled */
+    height: min(50vw, 450px);
+    padding: clamp(1.5rem, 3vw, 2.5rem); /* More padding for desktop */
   }
 
-  .design-2 .clock {
-    font-size: 3rem;
+  .clock {
+    font-size: clamp(2rem, 5vw, 4rem); /* Slightly smaller max to fit */
+    gap: 0.3rem; /* Tighten spacing if needed */
   }
 
-  .design-2 .date {
+  .date {
+    font-size: clamp(1rem, 2vw, 1.25rem); /* Adjust date size */
+  }
+
+  .customization-buttons {
+    gap: 0.3rem; /* Tighten button spacing */
+  }
+
+  .customization-buttons button {
+    padding: 0.6rem; /* Slightly smaller buttons */
+    font-size: 1.1rem;
+  }
+
+  .slider-container {
+    width: 80%; /* Constrain slider width */
+    margin: 1rem auto;
+  }
+}
+
+@media (max-width: 768px) {
+
+  
+  .customization-buttons button {
+    padding: 0.6rem;
     font-size: 1rem;
   }
-}
 
-/* ===== Utility Classes ===== */
-.dots {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-  gap: 30px;
-}
-
-.dot {
-  width: 10px;
-  height: 10px;
-  background-color: var(--primary-color);
-  border-radius: 50%;
-}
-
-
-.dot-dark {
-  width: 10px;
-  height: 10px;
-  background-color: var(--primary-color-dark);
-  border-radius: 50%;
-}
-
-.dot-dark:hover {
-  background-color: var(--primary-color);
-  box-shadow: 0 0 20px var(--primary-color);
-}
-
-
-
-.message {
-  text-align: center;
-  font-size: 1.5rem;
-  margin-top: 60px;
-  font-family: var(--font-ui);
-}
-
-/* ===== Animation Delays ===== */
-.dot:nth-child(1) {
-  animation-delay: 0s;
-}
-
-.dot:nth-child(2) {
-  animation-delay: 0.3s;
-}
-
-.dot:nth-child(3) {
-  animation-delay: 0.6s;
-}
-
-/* Fullscreen Button */
-.fullscreen-button {
-  position: fixed;
-  bottom: 20%;
-  right: 20%;
-  padding: 4px 8px;
-  font-size: 1.5rem;
-  cursor: pointer;
-  margin-bottom: 5px;
-  display: flex;
-  /* Add display: flex to the buttons */
-  justify-content: center;
-  /* Center content horizontally */
-  align-items: center;
-  /* Center content vertically */
-  color: var(--primary-color-dark);
-  /* Fixed color value */
-  border: none;
-  background: none;
-  font-size: 2rem;
-  opacity: 0.9;
-  transition: opacity 0.3s ease;
-}
-
-
-.fullscreen-button:hover {
-  color: var(--primary-color);
-}
-
-@media (max-width: 768px) {
   .fullscreen-button {
-    font-size: 1.5rem;
-    bottom: 20px;
-    right: 20px;
+    padding: 0.6rem;
+    font-size: 1rem;
   }
-}
+  .clock-container {
+    padding: 1rem;
+    width: min(90vw, 400px);  /* Smaller max size on mobile */
+  }
+  
+  .circle {
+    width: min(80vw, 350px);  /* Slightly larger % for mobile */
+    height: min(80vw, 350px);
+    padding: 1rem;
+  }
 
-.nav-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  font-size: 2rem;
-  color: var(--primary-color);
-  cursor: pointer;
-  opacity: 0.5;
-  transition: opacity 0.3s ease;
-}
+  .clock {
+    font-size: clamp(2.5rem, 6vw, 3rem);  /* More responsive font */
+  }
 
-.nav-arrow:hover {
-  opacity: 1;
-}
-
-.left-arrow {
-  left: -40px;
-}
-
-.right-arrow {
-  right: -40px;
-}
-
-@media (max-width: 768px) {
-  .nav-arrow {
-    display: none;
-    /* Hide on mobile */
+  .date {
+    font-size: clamp(0.8rem, 2.5vw, 1rem);
   }
 }
