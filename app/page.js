@@ -124,12 +124,7 @@ export default function Home() {
               day: "numeric",
             })}
           </div>
-        </div>
-      ) : (
-        <div className="loading">Loading...</div>
-      )}
-
-      <button
+          <button
         className="settings-button"
         onClick={() => setShowSettings(!showSettings)}
         aria-label="Settings"
@@ -137,6 +132,12 @@ export default function Home() {
       >
         ⚙️
       </button>
+        </div>
+      ) : (
+        <div className="loading">Loading...</div>
+      )}
+
+      
 
       {showSettings && (
         <div className="settings-panel">
