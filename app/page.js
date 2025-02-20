@@ -1,40 +1,31 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import "./styles.css"; // Import the CSS file
+import { useEffect, useState, useCallback } from "react";
+import "./styles.css";
 
-<link rel="icon" href="/favicon.ico" sizes="any" />
+const fonts = [
+  '"Courier New"', 'Arial', 'Georgia', 'Verdana', 'Impact',
+  'Trebuchet MS', '"Roboto"', '"Orbitron"', '"Montserrat"'
+];
+const shapes = ['square', 'circle'];
+const colorPalette = ['#c678dd', '#61afef', '#e06c75', '#98c379', '#e5c07b', '#56b6c2', '#abb2bf'];
+const borderStyles = ['solid', 'dashed', 'dotted', 'double', 'groove'];
 
 export default function Home() {
-  const [mounted, setMounted] = useState(false);
-  const [time, setTime] = useState(new Date());
-  const [currentDesign, setCurrentDesign] = useState(1); // Start with first design
-
-  const [touchStartX, setTouchStartX] = useState(0);
-  const [touchEndX, setTouchEndX] = useState(0);
-
-  const handleTouchStart = (e) => {
-    setTouchStartX(e.touches[0].clientX);
-  };
-
-  const handleTouchMove = (e) => {
-    setTouchEndX(e.touches[0].clientX);
-  };
-
-  const handleTouchEnd = () => {
-    if (touchStartX - touchEndX > 50) {
-      // Swipe left -> Next design
-      setCurrentDesign((prev) => (prev < 3 ? prev + 1 : 1));
-    } else if (touchEndX - touchStartX > 50) {
-      // Swipe right -> Previous design
-      setCurrentDesign((prev) => (prev > 1 ? prev - 1 : 3));
-    }
-  };
-
-
+  const [time, setTime] = useState(null);
+  const [isMounted, setIsMounted] = useState(false);
+  const [clockFont, setClockFont] = useState('monospace');
+  const [clockShape, setClockShape] = useState('square');
+  const [primaryColor, setPrimaryColor] = useState('#c678dd');
+  const [borderColor, setBorderColor] = useState('#3a3f4b');
+  const [borderWidth, setBorderWidth] = useState(4);
+  const [visualEffect, setVisualEffect] = useState('default');
+  const [showSettings, setShowSettings] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    setIsMounted(true);
+    setTime(new Date()); 
+
     const timer = setInterval(() => {
       setTime(new Date());
     }, 1000);
@@ -42,128 +33,149 @@ export default function Home() {
     return () => clearInterval(timer);
   }, []);
 
-  const formatNumber = (num) => {
-    return num.toString().padStart(2, "0");
+  useEffect(() => {
+    if (isMounted) {
+      const savedPreferences = localStorage.getItem('clockPreferences');
+      if (savedPreferences) {
+        const parsedPreferences = JSON.parse(savedPreferences);
+        setClockFont(parsedPreferences.clockFont);
+        setClockShape(parsedPreferences.clockShape);
+        setPrimaryColor(parsedPreferences.primaryColor);
+        setBorderColor(parsedPreferences.borderColor);
+        setBorderWidth(parsedPreferences.borderWidth);
+        setVisualEffect(parsedPreferences.visualEffect);
+      }
+    }
+  }, [isMounted]);
+
+  useEffect(() => {
+    if (isMounted) {
+      const preferences = {
+        clockFont,
+        clockShape,
+        primaryColor,
+        borderColor,
+        borderWidth,
+        visualEffect,
+      };
+      localStorage.setItem('clockPreferences', JSON.stringify(preferences));
+    }
+  }, [clockFont, clockShape, primaryColor, borderColor, borderWidth, visualEffect, isMounted]);
+
+  const handleBorderWidthChange = (e) => {
+    setBorderWidth(parseInt(e.target.value, 10));
   };
 
-  if (!mounted) {
-    return (
-      <main className="container">
-        <div className="clock-container">
-          <div className="clock">
-            <span className="digit">00</span>:<span className="digit">00</span>:<span className="digit">00</span>
-          </div>
-          <div className="loading-text">Loading...</div>
-        </div>
-        <div className="dots">
-          <div className="dot"></div>
-          <div className="dot"></div>
-          <div className="dot"></div>
-        </div>
-      </main>
-    );
-  }
+  const formatNumber = (num) => num.toString().padStart(2, "0");
 
-  const toggleFullScreen = () => {
+  const toggleFullScreen = useCallback(() => {
     if (!document.fullscreenElement) {
       document.documentElement.requestFullscreen();
-    } else if (document.exitFullscreen) {
+    } else {
       document.exitFullscreen();
     }
-  };
+  }, []);
 
-  // Function to change design
-  const changeDesign = (newDesign) => {
-    setCurrentDesign(newDesign);
-  };
+  const resetSettings = useCallback(() => {
+    setClockFont('monospace');
+    setClockShape('square');
+    setPrimaryColor('#c678dd');
+    setBorderColor('#3a3f4b');
+    setBorderWidth(4);
+    setVisualEffect('default');
+
+    if (isMounted) {
+      localStorage.setItem('clockPreferences', JSON.stringify({
+        clockFont: 'monospace',
+        clockShape: 'square',
+        primaryColor: '#c678dd',
+        borderColor: '#3a3f4b',
+        borderWidth: 4,
+        visualEffect: 'default',
+      }));
+    }
+  }, [isMounted]);
 
   return (
-    <main className="container"
-
-
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
-
-    >
-
-
-
-
-    
-      <div className={`clock-container design-${currentDesign}`}>
-
-        <button className="nav-arrow left-arrow" onClick={() => changeDesign(currentDesign > 1 ? currentDesign - 1 : 3)}>
-          {"\u25C0"} {/* Left arrow */}
-        </button>
-
-        <button className="nav-arrow right-arrow" onClick={() => changeDesign(currentDesign < 3 ? currentDesign + 1 : 1)}>
-          {"\u25B6"} {/* Right arrow */}
-        </button>
-
-        <div className="clock">
-          <span className="digit">{formatNumber(time.getHours())}</span>
-          <span className="blink">:</span>
-          <span className="digit">{formatNumber(time.getMinutes())}</span>
-          <span className="blink">:</span>
-          <span className="digit">{formatNumber(time.getSeconds())}</span>
+    <main className="container">
+      {isMounted && time ? (
+        <div
+          className={`clock-container ${clockShape} ${visualEffect}`}
+          style={{
+            '--primary-color': primaryColor,
+            '--border-color': borderColor,
+            fontFamily: clockFont,
+            border: `${borderWidth}px solid ${borderColor}`,
+          }}
+        >
+          <div className="clock">
+            {[time.getHours(), time.getMinutes(), time.getSeconds()].map((t, i) => (
+              <span key={i} className="digit">
+                {formatNumber(t)}
+                {i < 2 && <span className="blink">:</span>}
+              </span>
+            ))}
+          </div>
+          <div className="date">
+            {time.toLocaleDateString("en-US", {
+              weekday: "long",
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </div>
         </div>
+      ) : (
+        <div className="loading">Loading...</div>
+      )}
 
+      <button
+        className="settings-button"
+        onClick={() => setShowSettings(!showSettings)}
+        aria-label="Settings"
+        title="Settings"
+      >
+        ⚙️
+      </button>
 
+      {showSettings && (
+        <div className="settings-panel">
+          <button
+            className="close-button"
+            onClick={() => setShowSettings(false)}
+            aria-label="Close settings"
+          >
+            ×
+          </button>
+          <div className="customization-buttons">
+            <button onClick={() => setClockFont(fonts[Math.floor(Math.random() * fonts.length)])} aria-label="Change font">𝖠b</button>
+            <button onClick={() => setClockShape(shapes[Math.floor(Math.random() * shapes.length)])} aria-label="Change shape">◻️</button>
+            <button onClick={() => setPrimaryColor(colorPalette[Math.floor(Math.random() * colorPalette.length)])} aria-label="Change color">🎨</button>
+            <button onClick={() => setBorderColor(`hsl(${Math.random() * 360}, 70%, 50%)`)} aria-label="Change border">🖌</button>
+            <button onClick={() => setVisualEffect(['shadow', 'glow', 'neon', 'vintage'][Math.floor(Math.random() * 4)])} aria-label="Visual effects">✨</button>
+          </div>
 
+          <button className="fullscreen-button" onClick={toggleFullScreen} aria-label="Toggle fullscreen">
+            ⛶
+          </button>
 
+          <button onClick={resetSettings} aria-label="Reset settings">
+            🔄 Reset
+          </button>
 
-        <div className="date">
-          {time.toLocaleDateString("en-US", {
-            weekday: "long",
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })}
+          <div className="slider-container">
+            <label htmlFor="border-width">{borderWidth}px</label>
+            <input
+              type="range"
+              id="border-width"
+              min="1"
+              max="15"
+              value={borderWidth}
+              onChange={handleBorderWidthChange}
+            />
+          </div>
         </div>
-
-
-
-        {currentDesign === 1 && (
-          <>
-            <div className="dots">
-              <div className="dot" onClick={() => changeDesign(1)}></div>
-              <div className="dot-dark" onClick={() => changeDesign(2)}></div>
-              <div className="dot-dark" onClick={() => changeDesign(3)}></div>
-            </div>
-
-          </>
-        )}
-
-        {currentDesign === 2 && (
-          <>
-            <div className="dots">
-              <div className="dot-dark" onClick={() => changeDesign(1)}></div>
-              <div className="dot" onClick={() => changeDesign(2)}></div>
-              <div className="dot-dark" onClick={() => changeDesign(3)}></div>
-            </div>
-
-
-          </>
-        )}
-
-        {currentDesign === 3 && (
-          <>
-
-            <div className="dots">
-              <div className="dot-dark" onClick={() => changeDesign(1)}></div>
-              <div className="dot-dark" onClick={() => changeDesign(2)}></div>
-              <div className="dot" onClick={() => changeDesign(3)}></div>
-            </div>
-          </>
-        )}
-
-        <button className="fullscreen-button" onClick={toggleFullScreen}>
-          {"\u26F6"}
-        </button>
-
-      </div>
-
+      )}
     </main>
   );
 }
