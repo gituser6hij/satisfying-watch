@@ -1,0 +1,358 @@
+/* General Container */
+.container {
+    min-height: 100vh;
+    background-color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    flex-direction: column;
+}
+
+/* Clock Container */
+.clock-container {
+    background-color: #1a1a1a;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0px 0px 15px rgba(255, 183, 77, 0.2);
+    border: 4px solid #333;
+    text-align: center;
+    max-width: 600px;
+    width: 100%;
+}
+
+/* Clock Digits */
+.clock {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: monospace;
+    font-size: 4rem;
+    color: #ffb74d;
+}
+
+.digit {
+    display: inline-block;
+    width: 1.1em;
+    text-align: center;
+}
+
+.blink {
+    animation: blink-animation 6s infinite alternate;
+}
+
+@keyframes blink-animation {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+/* Date Styling */
+.date {
+    font-family: monospace;
+    font-size: 1.5rem;
+    color: #ffb74d;
+    margin-top: 15px;
+}
+
+/* Loading Text */
+.loading-text {
+    font-family: monospace;
+    font-size: 1.5rem;
+    color: #ffb74d;
+    margin-top: 15px;
+}
+
+/* Decorative Dots */
+.dots {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 10px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    background-color: #ffb74d;
+    border-radius: 50%;
+}
+
+
+/* Stagger the animation for each dot */
+.dot:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.dot:nth-child(2) {
+    animation-delay: 0.3s;
+}
+
+.dot:nth-child(3) {
+    animation-delay: 0.6s;
+}
+
+@keyframes dot-fade {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+}
+
+
+.message {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #ffb74d;
+    margin-top: 60px;
+    font-family: Arial, sans-serif;
+}
+
+
+.button-container {
+    position: fixed;  /* Changed from absolute to ensure consistent positioning */
+    top: 10px;
+    right: 10px;
+    display: flex;    /* Add display: flex */
+    flex-direction: column;
+    gap: 10px;        /* Adds space between buttons */
+    align-items: center;  /* Centers the buttons horizontally within the container */
+}
+
+/* Fullscreen Button */
+.fullscreen-button {
+    padding: 4px 8px;
+    font-size: 1.5rem;
+    color: fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 5px;
+    display: flex;           /* Add display: flex to the buttons */
+    justify-content: center; /* Center content horizontally */
+    align-items: center;     /* Center content vertically */
+    width: 30px;
+    height: 30px;
+}
+
+.fullscreen-button:hover {
+    background-color: #ffa726;
+}
+
+/* Design Buttons */
+.design-button {
+    padding: 4px 8px;
+    font-size: 1rem;
+    color: #ffffff;
+    cursor: pointer;
+    margin-bottom: 10px;
+    display: block;
+    /* Makes buttons stack vertically */
+    justify-content: center; /* Center content horizontally */
+    align-items: center;     /* Center content vertically */
+    width: 30px;
+    height: 30px;
+    display: flex;           /* Add display: flex to the buttons */
+    justify-content: center; /* Center content horizontally */
+    align-items: center;     /* Center content vertically */
+    /* First design button */
+    text-shadow: 0 0 5px #ffb74d;
+    background-color: #1a1a1a;
+    border: 2px solid #ffb74d;
+    box-shadow: 0 0 10px #ffb74d;
+    border-radius: 5px;
+}
+
+.design-button:hover {
+    background-color: #ffa726;
+}
+
+.design-button:nth-child(1) {
+    display: flex;           /* Add display: flex to the buttons */
+    justify-content: center; /* Center content horizontally */
+    align-items: center;     /* Center content vertically */
+    /* First design button */
+    text-shadow: 0 0 5px #ffffff;
+    background-color: #1a1a1a;
+    border: 2px solid #ffb74d;
+    box-shadow: 0 0 10px #ffb74d;
+    border-radius: 5px;
+}
+
+
+.design-button:nth-child(2) {
+    color: #ffffff;
+    text-shadow: 0 0 5px #ffffff;
+    background-color: #2b2b2b;
+    border: 2px solid #4a4a4a;
+    box-shadow: 0 0 10px #ffffff;
+    border-radius: 50%;
+    display: flex;           /* Add display: flex to the buttons */
+    justify-content: center; /* Center content horizontally */
+    align-items: center;     /* Center content vertically */
+    
+}
+
+.design-button:nth-child(3) {
+    background-color: #000;
+    border: 2px solid #00ff00;
+    color: #00ff00;
+    box-shadow: 0 0 10px #00ff00;
+    text-shadow: 0 0 5px #00ff00;
+    display: flex;           /* Add display: flex to the buttons */
+    justify-content: center; /* Center content horizontally */
+    align-items: center;     /* Center content vertically */
+}
+
+/* Design 1 - Original Dark Theme */
+.design-1 {
+    background-color: #1a1a1a;
+    box-shadow: 0px 0px 15px rgba(255, 183, 77, 0.2);
+    border: 4px solid #333;
+}
+
+.design-1 .clock {
+    font-family: monospace;
+    font-size: 4rem;
+    color: #ffb74d;
+}
+
+.design-1 .date {
+    font-family: monospace;
+    font-size: 1.5rem;
+    color: #ffb74d;
+    margin-top: 15px;
+}
+
+/* Design 2 - Train Station Clock specific styles */
+.design-2 {
+    background-color: #2b2b2b;
+    border: 8px solid #4a4a4a;
+    box-shadow:
+        inset 0 0 20px rgba(0, 0, 0, 0.5),
+        0 0 30px rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    width: 400px;
+    /* Fixed width */
+    height: 400px;
+    /* Fixed height to ensure perfect circle */
+    padding: 0;
+    /* Remove padding */
+    position: relative;
+    /* For absolute positioning of content */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Specific positioning for clock elements in design-2 */
+.design-2 .clock {
+    font-family: 'Arial', sans-serif;
+    font-size: 4rem;
+    font-weight: bold;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    line-height: 1;
+    /* Prevent extra spacing */
+    margin: 0;
+    /* Remove margins */
+}
+
+.design-2 .date {
+    font-family: 'Arial', sans-serif;
+    font-size: 1.1rem;
+    color: #cccccc;
+    margin-top: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+
+/* Optional: Add subtle tick marks around the circle */
+.design-2::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    bottom: -2px;
+    left: -2px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+}
+
+/* Make the container responsive */
+@media (max-width: 500px) {
+    .design-2 {
+        width: 300px;
+        height: 300px;
+    }
+
+    .design-2 .clock {
+        font-size: 3rem;
+    }
+
+    .design-2 .date {
+        font-size: 1rem;
+    }
+}
+
+/* Design 3 - Matrix Theme */
+.matrix-bg {
+    background-color: #000;
+    position: relative;
+    overflow: hidden;
+}
+
+.matrix-bg::before {
+    content: '01';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(0, 255, 0, 0.1) 50%,
+            rgba(0, 0, 0, 0.1) 50%);
+    background-size: 100% 4px;
+    animation: matrix-scan 10s linear infinite;
+    pointer-events: none;
+}
+
+.design-3 {
+    background-color: transparent;
+    border: 2px solid #00ff00;
+    box-shadow: 0 0 20px #00ff00;
+}
+
+.design-3 .clock {
+    font-family: 'Courier New', monospace;
+    font-size: 4.5rem;
+    color: #00ff00;
+    text-shadow: 0 0 10px #00ff00;
+}
+
+.design-3 .date {
+    font-family: 'Courier New', monospace;
+    font-size: 1.3rem;
+    color: #00ff00;
+    text-shadow: 0 0 5px #00ff00;
+    margin-top: 20px;
+}
+
+.design-3 .blink {
+    animation: matrix-blink 1s steps(2) infinite;
+}

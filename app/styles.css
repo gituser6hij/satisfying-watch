@@ -1,0 +1,326 @@
+/* ===== CSS Variables ===== */
+:root {
+  /* Colors */
+  --primary-color: #ffb74d;
+  --primary-color-dark: #F59300;
+  --secondary-color: #1a1a1a;
+  --background-color: #0D0B07;
+  --text-color-light: #ffffff;
+  --matrix-green: #00ff00;
+
+  /* Additional colors pallette */
+  /* CSS HEX */
+  --drab-dark-brown: #363020ff;
+  --walnut-brown: #605c4eff;
+  --white: #ffffffff;
+  --hunyadi-yellow: #ffb74dff;
+  --burnt-sienna: #d7816aff;
+
+
+  /* Spacing */
+  --base-spacing: 15px;
+  --container-padding: 30px;
+
+  /* Typography */
+  --font-monospace: monospace;
+  --font-ui: Arial, sans-serif;
+  --font-matrix: 'Courier New', monospace;
+
+  /* Borders */
+  --base-border-radius: 15px;
+  --button-border-radius: 5px;
+
+  /* Transitions */
+  --base-transition: all 0.3s ease;
+}
+
+/* ===== Base Styles ===== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--primary-color);
+  font-family: var(--font-monospace);
+}
+
+/* ===== Layout Styles ===== */
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.button-container {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 100;
+}
+
+/* ===== Component Styles ===== */
+/* Clock Container */
+.clock-container {
+  position: relative;
+  /* Ensure absolute positioning inside works */
+  background-color: var(--secondary-color);
+  padding: var(--container-padding);
+  border-radius: var(--base-border-radius);
+  text-align: center;
+  max-width: 600px;
+  width: 100%;
+  transition: var(--base-transition);
+}
+
+/* Clock Elements */
+.clock {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 4rem;
+}
+
+.digit {
+  display: inline-block;
+  width: 1.1em;
+  text-align: center;
+}
+
+.date {
+  font-size: 1.5rem;
+  margin-top: var(--base-spacing);
+}
+
+/* Buttons */
+.button {
+  padding: 4px 8px;
+  border: none;
+  border-radius: var(--button-border-radius);
+  cursor: pointer;
+  transition: var(--base-transition);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+}
+
+
+
+/* Animations */
+@keyframes blink-animation {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+.blink {
+  animation: blink-animation 6s infinite alternate;
+}
+
+/* ===== Design Variations ===== */
+/* Design 1 - Default Theme */
+.design-1 {
+  border: 4px solid #333;
+  box-shadow: 0px 0px 15px rgba(255, 183, 77, 0.2);
+}
+
+/* Design 2 - Train Station */
+.design-2 {
+  background-color: #2b2b2b;
+  border: 8px solid #4a4a4a;
+  border-radius: 50%;
+  width: 400px;
+  height: 400px;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(255, 255, 255, 0.1);
+  /* Fixed height to ensure perfect circle */
+  padding: 0;
+  /* Remove padding */
+  position: relative;
+  /* For absolute positioning of content */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.design-2 .clock {
+  font-family: var(--font-ui);
+  font-weight: bold;
+  color: var(--text-color-light);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.design-2 .date {
+  font-family: var(--font-ui);
+  color: #cccccc;
+  font-size: 1.1rem;
+}
+
+/* Design 3 - Matrix Theme */
+.design-3 {
+  background-color: transparent;
+  border: 2px solid var(--matrix-green);
+  box-shadow: 0 0 20px var(--matrix-green);
+}
+
+.design-3 .clock {
+  font-family: var(--font-matrix);
+  color: var(--matrix-green);
+  text-shadow: 0 0 10px var(--matrix-green);
+}
+
+.design-3 .date {
+  font-family: var(--font-matrix);
+  color: var(--matrix-green);
+  text-shadow: 0 0 5px var(--matrix-green);
+}
+
+/* ===== Media Queries ===== */
+@media (max-width: 500px) {
+  .design-2 {
+    width: 300px;
+    height: 300px;
+  }
+
+  .design-2 .clock {
+    font-size: 3rem;
+  }
+
+  .design-2 .date {
+    font-size: 1rem;
+  }
+}
+
+/* ===== Utility Classes ===== */
+.dots {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 30px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  background-color: var(--primary-color);
+  border-radius: 50%;
+}
+
+
+.dot-dark {
+  width: 10px;
+  height: 10px;
+  background-color: var(--primary-color-dark);
+  border-radius: 50%;
+}
+
+.dot-dark:hover {
+  background-color: var(--primary-color);
+  box-shadow: 0 0 20px var(--primary-color);
+}
+
+
+
+.message {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-top: 60px;
+  font-family: var(--font-ui);
+}
+
+/* ===== Animation Delays ===== */
+.dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.3s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.6s;
+}
+
+/* Fullscreen Button */
+.fullscreen-button {
+  position: fixed;
+  bottom: 20%;
+  right: 20%;
+  padding: 4px 8px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-bottom: 5px;
+  display: flex;
+  /* Add display: flex to the buttons */
+  justify-content: center;
+  /* Center content horizontally */
+  align-items: center;
+  /* Center content vertically */
+  color: var(--primary-color-dark);
+  /* Fixed color value */
+  border: none;
+  background: none;
+  font-size: 2rem;
+  opacity: 0.9;
+  transition: opacity 0.3s ease;
+}
+
+
+.fullscreen-button:hover {
+  color: var(--primary-color);
+}
+
+@media (max-width: 768px) {
+  .fullscreen-button {
+    font-size: 1.5rem;
+    bottom: 20px;
+    right: 20px;
+  }
+}
+
+.nav-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: var(--primary-color);
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.nav-arrow:hover {
+  opacity: 1;
+}
+
+.left-arrow {
+  left: -40px;
+}
+
+.right-arrow {
+  right: -40px;
+}
+
+@media (max-width: 768px) {
+  .nav-arrow {
+    display: none;
+    /* Hide on mobile */
+  }
+}
