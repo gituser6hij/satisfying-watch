@@ -427,9 +427,9 @@ body {
 
 @media (min-width: 769px) {
   .circle {
-    width: min(50vw, 450px);
+    width: min(50vw, 600px);
     /* Slightly larger but controlled */
-    height: min(50vw, 450px);
+    height: min(50vw, 600px);
     padding: clamp(1.5rem, 3vw, 2.5rem);
     /* More padding for desktop */
   }
@@ -531,8 +531,8 @@ body {
   }
 
   .circle {
-    width: 300px;
-    height: 300px;
+    width: 350px;
+    height: 350px;
   }
 
   .clock {
