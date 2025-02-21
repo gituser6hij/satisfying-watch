@@ -130,10 +130,6 @@ export default function Home() {
   useEffect(() => {
     let touchStartX = 0;
     let touchEndX = 0;
-
-    const clockContainer = document.querySelector(".clock");
-
-  if (!clockContainer) return;
   
     const handleTouchStart = (e) => {
       touchStartX = e.touches[0].clientX;
