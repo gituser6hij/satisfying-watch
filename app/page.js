@@ -4,19 +4,13 @@ import { useEffect, useState, useCallback } from "react";
 import "./styles.css";
 
 const fonts = [
-  '"Courier New"',
   'Arial',
-  'Georgia',
   'Verdana',
   'Impact',
-  'Trebuchet MS',
   '"Roboto"',
-  '"Orbitron"',
   '"Montserrat"',
-  '"Fira Code"',       // Monospace with coding ligatures
   '"Poppins"',         // Modern sans-serif
   '"Playfair Display"',// Elegant serif
-  '"Space Mono"',      // Technical monospace
   '"Pacifico"',        // Handwritten style
   '"Bebas Neue"',      // Bold condensed sans
   '"Lobster"',         // Playful script
@@ -30,7 +24,6 @@ const fonts = [
   '"Righteous"',       // Compact sans
   '"Monoton"',         // Display font
   '"VT323"',           // Terminal style
-  '"Share Tech Mono"'  // Techy monospace
 ];
 const shapes = ['square', 'circle'];
 const colorPalette = ['#e8c547ff', '#30323dff', '#4d5061ff', '#fe5f55ff', '#fceff9ff', '#f6ca83ff', '#f5d6baff', '#fff', '#000'];
@@ -41,7 +34,7 @@ const borderStyles = ['solid', 'dashed', 'dotted', 'double', 'groove'];
 export default function Home() {
   const [time, setTime] = useState(null);
   const [isMounted, setIsMounted] = useState(false);
-  const [clockFont, setClockFont] = useState('monospace');
+  const [clockFont, setClockFont] = useState('Press Start 2P');
   const [clockShape, setClockShape] = useState('square');
   const [primaryColor, setPrimaryColor] = useState('#e8c547ff');
   const [borderColor, setBorderColor] = useState('#f5d6baff');
@@ -53,7 +46,21 @@ export default function Home() {
 
 
 
-  const backgrounds = ["--secondary-color", "--saffron", "--black-bean", "--bittersweet"];
+  const backgrounds = ["--primary-color",
+    "--saffron",
+    "--bittersweet",
+    "--lavender-blush",
+    "--jet",           // Dark gray
+    "--black-bean",    // Very dark blue/black
+    "--indigo-dye",    // Dark blue
+    "--davys-gray",    // Medium dark gray
+    "--light-orange",  // Light cream
+    "--sunset",        // Warm light yellow
+    "--blue-munsell",  // Medium blue
+    "--bittersweet",   // Coral red
+    "--lavender-blush", // Pale pink
+    "black",
+    "white"];
   const [clockBackground, setClockBackground] = useState(backgrounds[0]);
 
   const fontColors = [
@@ -73,7 +80,7 @@ export default function Home() {
     "black",
     "white"
   ];
-  const [clockFontColor, setClockFontColor] = useState(fontColors[0]);
+  const [clockFontColor, setClockFontColor] = useState(fontColors[7]);
 
   
 
@@ -117,9 +124,9 @@ export default function Home() {
         setBorderColor(parsedPreferences.borderColor);
         setBorderWidth(parsedPreferences.borderWidth);
         setVisualEffect(parsedPreferences.visualEffect);
-        setFontSize(parsedPreferences.fontSize ?? 3);
-        setClockBackground(parsedPreferences.clockBackground ?? backgrounds[0]); // Add this
-        setClockFontColor(parsedPreferences.clockFontColor ?? fontColors[0]);    // Add this
+        setFontSize(parsedPreferences.fontSize ?? 3.2);
+        setClockBackground(parsedPreferences.clockBackground ?? backgrounds[2]); // Add this
+        setClockFontColor(parsedPreferences.clockFontColor ?? fontColors[7]);    // Add this
       }
     }
   }, [isMounted]);
@@ -168,21 +175,27 @@ export default function Home() {
   }, []);
 
   const resetSettings = useCallback(() => {
-    setClockFont('monospace');
+    setClockFont('Press Start 2P');
     setClockShape('square');
-    setPrimaryColor('#c678dd');
+    setPrimaryColor('--primary-color');
     setBorderColor('#3a3f4b');
     setBorderWidth(4);
     setVisualEffect('default');
+    setFontSize(5);
+    setClockBackground(backgrounds[2]);
+    setClockFontColor(fontColors[7]);
 
     if (isMounted) {
       localStorage.setItem('clockPreferences', JSON.stringify({
-        clockFont: 'monospace',
+        clockFont: 'Press Start 2P',
         clockShape: 'square',
-        primaryColor: '#c678dd',
+        primaryColor: '--primary-color',
         borderColor: '#3a3f4b',
-        borderWidth: 4,
+        borderWidth: 3,
         visualEffect: 'default',
+        fontSize: 5,
+        backgrounds: backgrounds[2],
+        fontColors: fontColors[7],
       }));
     }
   }, [isMounted]);
