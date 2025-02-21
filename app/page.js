@@ -82,7 +82,36 @@ export default function Home() {
   ];
   const [clockFontColor, setClockFontColor] = useState(fontColors[7]);
 
-  
+  const generateRandomDesign = useCallback(() => {
+    // Random font
+    const newFont = fonts[Math.floor(Math.random() * fonts.length)];
+    // Random shape
+    const newShape = shapes[Math.floor(Math.random() * shapes.length)];
+    // Random colors
+    const newPrimaryColor = colorPalette[Math.floor(Math.random() * colorPalette.length)];
+    const newBorderColor = colorPalette[Math.floor(Math.random() * colorPalette.length)];
+    // Random border width (1-12)
+    const newBorderWidth = Math.floor(Math.random() * 12) + 1;
+    // Random visual effect
+    const effects = ['shadow', 'glow', 'neon', 'vintage'];
+    const newVisualEffect = effects[Math.floor(Math.random() * effects.length)];
+    // Random font size (1-6 in 0.2 steps)
+    const newFontSize = Math.floor(Math.random() * 26) * 0.2 + 1;
+    // Random background and text color
+    const newClockBackground = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+    const newClockFontColor = fontColors[Math.floor(Math.random() * fontColors.length)];
+
+    // Update all states
+    setClockFont(newFont);
+    setClockShape(newShape);
+    setPrimaryColor(newPrimaryColor);
+    setBorderColor(newBorderColor);
+    setBorderWidth(newBorderWidth);
+    setVisualEffect(newVisualEffect);
+    setFontSize(newFontSize);
+    setClockBackground(newClockBackground);
+    setClockFontColor(newClockFontColor);
+  }, []);
 
   const getBoxShadow = useCallback(() => {
     switch (visualEffect) {
@@ -97,6 +126,58 @@ export default function Home() {
         return `0 10px 30px rgba(0,0,0,0.3)`;
     }
   }, [visualEffect]);
+
+  useEffect(() => {
+    let touchStartX = 0;
+    let touchEndX = 0;
+    let touchStartY = 0;
+    let touchEndY = 0;
+
+    const handleTouchStart = (e) => {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    };
+
+    const handleTouchMove = (e) => {
+      touchEndX = e.touches[0].clientX;
+      touchEndY = e.touches[0].clientY;
+    };
+
+    const handleTouchEnd = () => {
+      const swipeX = touchEndX - touchStartX;
+      const swipeY = touchEndY - touchStartY;
+
+      // Left or Right swipe → Randomize design
+      if (Math.abs(swipeX) > 50 && Math.abs(swipeX) > Math.abs(swipeY)) {
+        generateRandomDesign();
+      }
+
+      // Upward swipe → Enter fullscreen
+      if (swipeY < -50 && Math.abs(swipeY) > Math.abs(swipeX)) {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen();
+        }
+      }
+
+      // Downward swipe → Exit fullscreen
+      if (swipeY > 50 && Math.abs(swipeY) > Math.abs(swipeX)) {
+        if (document.fullscreenElement) {
+          document.exitFullscreen();
+        }
+      }
+    };
+
+    document.addEventListener("touchstart", handleTouchStart);
+    document.addEventListener("touchmove", handleTouchMove);
+    document.addEventListener("touchend", handleTouchEnd);
+
+    return () => {
+      document.removeEventListener("touchstart", handleTouchStart);
+      document.removeEventListener("touchmove", handleTouchMove);
+      document.removeEventListener("touchend", handleTouchEnd);
+    };
+  }, [generateRandomDesign]);
+
 
   useEffect(() => {
     console.log("Show Settings:", showSettings);
@@ -253,24 +334,24 @@ export default function Home() {
             })}
           </div>
           <div className="special-buttons">
-          <button
-  className="settings-button"
-  onClick={() => setShowSettings(!showSettings)}
-  aria-label="Settings"
-  title="Settings"
-  style={{ color: `var(${clockFontColor})` }} // Apply dynamic font color
->
-  {settingImage}
-</button>
+            <button
+              className="settings-button"
+              onClick={() => setShowSettings(!showSettings)}
+              aria-label="Settings"
+              title="Settings"
+              style={{ color: `var(${clockFontColor})` }} // Apply dynamic font color
+            >
+              {settingImage}
+            </button>
 
-<button 
-  className="fullscreen-button" 
-  onClick={toggleFullScreen} 
-  aria-label="Toggle fullscreen" 
-  style={{ color: `var(${clockFontColor})` }} // Apply dynamic font color
->
-  ⛶
-</button>
+            <button
+              className="fullscreen-button"
+              onClick={toggleFullScreen}
+              aria-label="Toggle fullscreen"
+              style={{ color: `var(${clockFontColor})` }} // Apply dynamic font color
+            >
+              ⛶
+            </button>
           </div>
         </div>
       ) : (
@@ -283,13 +364,23 @@ export default function Home() {
 
 
         <div className="settings-panel">
-          <button
-            className="close-button"
-            onClick={() => setShowSettings(false)}
-            aria-label="Close settings"
-          >
-            ×
-          </button>
+
+          <div className="special-buttons">
+            <button
+              onClick={generateRandomDesign}
+              aria-label="Random design"
+              title="Randomize all settings"
+            >
+              🔀
+            </button>
+            <button
+              className="close-button"
+              onClick={() => setShowSettings(false)}
+              aria-label="Close settings"
+            >
+              ×
+            </button>
+          </div>
 
           <div className="customization-buttons">
             <button onClick={() => setClockFont(prev => {
@@ -357,6 +448,7 @@ export default function Home() {
             <button onClick={resetSettings} aria-label="Reset settings">
               {"\u21BA"}
             </button>
+            
 
 
           </div>
@@ -397,6 +489,13 @@ export default function Home() {
 
         </div>
       )}
+      <button className="randomize-button"
+        onClick={generateRandomDesign}
+        aria-label="Random design"
+        title="Randomize all settings"
+      >
+        🔀
+      </button>
     </main>
   );
 }
