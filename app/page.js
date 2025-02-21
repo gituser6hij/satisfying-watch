@@ -130,53 +130,33 @@ export default function Home() {
   useEffect(() => {
     let touchStartX = 0;
     let touchEndX = 0;
-    let touchStartY = 0;
-    let touchEndY = 0;
-
+  
     const handleTouchStart = (e) => {
       touchStartX = e.touches[0].clientX;
-      touchStartY = e.touches[0].clientY;
     };
-
+  
     const handleTouchMove = (e) => {
       touchEndX = e.touches[0].clientX;
-      touchEndY = e.touches[0].clientY;
     };
-
+  
     const handleTouchEnd = () => {
-      const swipeX = touchEndX - touchStartX;
-      const swipeY = touchEndY - touchStartY;
-
-      // Left or Right swipe → Randomize design
-      if (Math.abs(swipeX) > 50 && Math.abs(swipeX) > Math.abs(swipeY)) {
+      const swipeDistance = touchEndX - touchStartX;
+      if (swipeDistance > 50 || swipeDistance < -50) {
         generateRandomDesign();
       }
-
-      // Upward swipe → Enter fullscreen
-      if (swipeY < -50 && Math.abs(swipeY) > Math.abs(swipeX)) {
-        if (!document.fullscreenElement) {
-          document.documentElement.requestFullscreen();
-        }
-      }
-
-      // Downward swipe → Exit fullscreen
-      if (swipeY > 50 && Math.abs(swipeY) > Math.abs(swipeX)) {
-        if (document.fullscreenElement) {
-          document.exitFullscreen();
-        }
-      }
     };
-
+  
     document.addEventListener("touchstart", handleTouchStart);
     document.addEventListener("touchmove", handleTouchMove);
     document.addEventListener("touchend", handleTouchEnd);
-
+  
     return () => {
       document.removeEventListener("touchstart", handleTouchStart);
       document.removeEventListener("touchmove", handleTouchMove);
       document.removeEventListener("touchend", handleTouchEnd);
     };
   }, [generateRandomDesign]);
+  
 
 
   useEffect(() => {
@@ -365,22 +345,13 @@ export default function Home() {
 
         <div className="settings-panel">
 
-          <div className="special-buttons">
-            <button
-              onClick={generateRandomDesign}
-              aria-label="Random design"
-              title="Randomize all settings"
-            >
-              🔀
-            </button>
-            <button
-              className="close-button"
-              onClick={() => setShowSettings(false)}
-              aria-label="Close settings"
-            >
-              ×
-            </button>
-          </div>
+          <button
+            className="close-button"
+            onClick={() => setShowSettings(false)}
+            aria-label="Close settings"
+          >
+            ×
+          </button>
 
           <div className="customization-buttons">
             <button onClick={() => setClockFont(prev => {
@@ -448,7 +419,15 @@ export default function Home() {
             <button onClick={resetSettings} aria-label="Reset settings">
               {"\u21BA"}
             </button>
-            
+
+            <button
+              onClick={generateRandomDesign}
+              aria-label="Random design"
+              title="Randomize all settings"
+            >
+              🔀
+            </button>
+
 
 
           </div>
