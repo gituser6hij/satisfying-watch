@@ -132,32 +132,32 @@ export default function Home() {
     if (!showSettings) {
       let touchStartX = 0;
       let touchEndX = 0;
-      
+
       // Get reference to clock container
       const clockContainer = document.querySelector('.clock-container');
-      
+
       if (!clockContainer) return;
 
       const handleTouchStart = (e) => {
         touchStartX = e.touches[0].clientX;
       };
-    
+
       const handleTouchMove = (e) => {
         touchEndX = e.touches[0].clientX;
       };
-    
+
       const handleTouchEnd = () => {
         const swipeDistance = touchEndX - touchStartX;
         if (swipeDistance > 50 || swipeDistance < -50) {
           generateRandomDesign();
         }
       };
-    
+
       // Add events to clock container only
       clockContainer.addEventListener("touchstart", handleTouchStart);
       clockContainer.addEventListener("touchmove", handleTouchMove);
       clockContainer.addEventListener("touchend", handleTouchEnd);
-    
+
       return () => {
         // Clean up events
         if (clockContainer) {
@@ -435,6 +435,7 @@ export default function Home() {
               onClick={generateRandomDesign}
               aria-label="Random design"
               title="Randomize all settings"
+
             >
               🔀
             </button>
@@ -483,9 +484,13 @@ export default function Home() {
         onClick={generateRandomDesign}
         aria-label="Random design"
         title="Randomize all settings"
+        style={{ color: `var(${clockFontColor})`, fill: `var(${clockFontColor})` }} // Apply dynamic font color
       >
-        🔀
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 9H7.5L4 4H2V6H3.5L7 11L3.5 16H2V18H4L7.5 13H10L14 19H20V22L24 18L20 14V17H15L11 11L15 5H20V8L24 4L20 0V3H14L10 9Z" />
+        </svg>
       </button>
+
     </main>
   );
 }
