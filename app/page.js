@@ -88,6 +88,10 @@ export default function Home() {
   }, [visualEffect]);
 
   useEffect(() => {
+    console.log("Show Settings:", showSettings);
+  }, [showSettings]);
+
+  useEffect(() => {
     setIsMounted(true);
     setTime(new Date());
 
@@ -109,9 +113,9 @@ export default function Home() {
         setBorderColor(parsedPreferences.borderColor);
         setBorderWidth(parsedPreferences.borderWidth);
         setVisualEffect(parsedPreferences.visualEffect);
-
-        setFontSize(parsedPreferences.fontSize ?? 2);
-
+        setFontSize(parsedPreferences.fontSize ?? 3);
+        setClockBackground(parsedPreferences.clockBackground ?? backgrounds[0]); // Add this
+        setClockFontColor(parsedPreferences.clockFontColor ?? fontColors[0]);    // Add this
       }
     }
   }, [isMounted]);
@@ -126,11 +130,12 @@ export default function Home() {
         borderWidth,
         visualEffect,
         fontSize,
-
+        clockBackground, // Add this
+        clockFontColor,  // Add this
       };
       localStorage.setItem('clockPreferences', JSON.stringify(preferences));
     }
-  }, [clockFont, clockShape, primaryColor, borderColor, borderWidth, visualEffect, fontSize,  isMounted]);
+  }, [clockFont, clockShape, primaryColor, borderColor, borderWidth, visualEffect, fontSize, clockBackground, clockFontColor, isMounted]);
 
   const handleFontSizeChange = (e) => {
     setFontSize(parseFloat(e.target.value));
@@ -178,25 +183,35 @@ export default function Home() {
     }
   }, [isMounted]);
 
-return (
+  const settingImage = (
+    <svg width="10" height="10" viewBox="0 0 100 80" fill="currentColor">
+      <rect width="100" height="20"></rect>
+      <rect y="30" width="100" height="20"></rect>
+      <rect y="60" width="100" height="20"></rect>
+    </svg>);
+
+
+
+
+  return (
     <main className="container">
+
       {isMounted && time ? (
         <div
-        className={`clock-container ${clockShape} ${
-          visualEffect === 'vintage' ? 'vintage' : ''
-        }`}
-        style={{
-          background: `var(${clockBackground})`,
-          '--primary-color': primaryColor,
-          '--border-color': borderColor,
-          fontFamily: clockFont,
-          border: `${borderWidth}px solid ${borderColor}`,
-          boxShadow: getBoxShadow(),
-        }}
-      >
+          className={`clock-container ${clockShape} ${visualEffect === 'vintage' ? 'vintage' : ''
+            } ${showSettings ? 'top' : ''}`} // Add the 'top' class conditionally
+          style={{
+            background: `var(${clockBackground})`,
+            '--primary-color': primaryColor,
+            '--border-color': borderColor,
+            fontFamily: clockFont,
+            border: `${borderWidth}px solid ${borderColor}`,
+            boxShadow: getBoxShadow(),
+          }}
+        >
           <div
             className="clock"
-            style={{ 
+            style={{
               color: `var(${clockFontColor})`,
               fontSize: `${fontSize}rem`,
             }}
@@ -220,14 +235,19 @@ return (
               day: "numeric",
             })}
           </div>
-          <button
-            className="settings-button"
-            onClick={() => setShowSettings(!showSettings)}
-            aria-label="Settings"
-            title="Settings"
-          >
-            ⚙️
-          </button>
+          <div className="special-buttons">
+            <button
+              className="settings-button"
+              onClick={() => setShowSettings(!showSettings)}
+              aria-label="Settings"
+              title="Settings"
+            >
+              {settingImage}
+            </button>
+            <button className="fullscreen-button" onClick={toggleFullScreen} aria-label="Toggle fullscreen">
+              ⛶
+            </button>
+          </div>
         </div>
       ) : (
         <div className="loading">Loading...</div>
@@ -237,7 +257,7 @@ return (
 
       {showSettings && (
 
-        
+
         <div className="settings-panel">
           <button
             className="close-button"
@@ -246,7 +266,7 @@ return (
           >
             ×
           </button>
-         
+
           <div className="customization-buttons">
             <button onClick={() => setClockFont(fonts[Math.floor(Math.random() * fonts.length)])} aria-label="Change font">𝖠b</button>
             <button
@@ -307,48 +327,46 @@ return (
             </button>
 
             <button onClick={resetSettings} aria-label="Reset settings">
-              🔄 Reset
+              {"\u21BA"}
             </button>
-            <button className="fullscreen-button" onClick={toggleFullScreen} aria-label="Toggle fullscreen">
-            ⛶
-          </button>
+
 
           </div>
 
-          
+
 
 
           <div className="customization-buttons">
-          <div className="slider-container">
-            <label htmlFor="border-width">{borderWidth}px</label>
-            <input
-              type="range"
-              id="border-width"
-              min="1"
-              max="12"
-              value={borderWidth}
-              onChange={handleBorderWidthChange}
-            />
+            <div className="slider-container">
+              <label htmlFor="border-width">{borderWidth}px</label>
+              <input
+                type="range"
+                id="border-width"
+                min="1"
+                max="12"
+                value={borderWidth}
+                onChange={handleBorderWidthChange}
+              />
+            </div>
+
+            <div className="slider-container">
+              <label htmlFor="font-size">{fontSize}rem</label>
+              <input
+                type="range"
+                id="font-size"
+                min="1"
+                max="4"
+                step="0.2"
+                value={fontSize}
+                onChange={handleFontSizeChange}
+              />
+            </div>
+
+
+
           </div>
 
-          <div className="slider-container">
-            <label htmlFor="font-size">{fontSize}rem</label>
-            <input
-              type="range"
-              id="font-size"
-              min="1"
-              max="4"
-              step="0.2"
-              value={fontSize}
-              onChange={handleFontSizeChange}
-            />
-          </div>
 
-          
-
-          </div>
-
-         
         </div>
       )}
     </main>
