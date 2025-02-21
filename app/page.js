@@ -128,35 +128,46 @@ export default function Home() {
   }, [visualEffect]);
 
   useEffect(() => {
-    let touchStartX = 0;
-    let touchEndX = 0;
-  
-    const handleTouchStart = (e) => {
-      touchStartX = e.touches[0].clientX;
-    };
-  
-    const handleTouchMove = (e) => {
-      touchEndX = e.touches[0].clientX;
-    };
-  
-    const handleTouchEnd = () => {
-      const swipeDistance = touchEndX - touchStartX;
-      if (swipeDistance > 50 || swipeDistance < -50) {
-        generateRandomDesign();
-      }
-    };
-  
-    document.addEventListener("touchstart", handleTouchStart);
-    document.addEventListener("touchmove", handleTouchMove);
-    document.addEventListener("touchend", handleTouchEnd);
-  
-    return () => {
-      document.removeEventListener("touchstart", handleTouchStart);
-      document.removeEventListener("touchmove", handleTouchMove);
-      document.removeEventListener("touchend", handleTouchEnd);
-    };
-  }, [generateRandomDesign]);
-  
+    // Only add touch events if settings are not shown
+    if (!showSettings) {
+      let touchStartX = 0;
+      let touchEndX = 0;
+      
+      // Get reference to clock container
+      const clockContainer = document.querySelector('.clock-container');
+      
+      if (!clockContainer) return;
+
+      const handleTouchStart = (e) => {
+        touchStartX = e.touches[0].clientX;
+      };
+    
+      const handleTouchMove = (e) => {
+        touchEndX = e.touches[0].clientX;
+      };
+    
+      const handleTouchEnd = () => {
+        const swipeDistance = touchEndX - touchStartX;
+        if (swipeDistance > 50 || swipeDistance < -50) {
+          generateRandomDesign();
+        }
+      };
+    
+      // Add events to clock container only
+      clockContainer.addEventListener("touchstart", handleTouchStart);
+      clockContainer.addEventListener("touchmove", handleTouchMove);
+      clockContainer.addEventListener("touchend", handleTouchEnd);
+    
+      return () => {
+        // Clean up events
+        if (clockContainer) {
+          clockContainer.removeEventListener("touchstart", handleTouchStart);
+          clockContainer.removeEventListener("touchmove", handleTouchMove);
+          clockContainer.removeEventListener("touchend", handleTouchEnd);
+        }
+      };
+    }
+  }, [generateRandomDesign, showSettings]); // Add showSettings to dependencies
 
 
   useEffect(() => {
