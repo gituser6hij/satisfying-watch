@@ -33,7 +33,7 @@ const fonts = [
   '"Share Tech Mono"'  // Techy monospace
 ];
 const shapes = ['square', 'circle'];
-const colorPalette = ['#e8c547ff', '#30323dff', '#4d5061ff', '#fe5f55ff', '#fceff9ff', '#f6ca83ff', '#f5d6baff'];
+const colorPalette = ['#e8c547ff', '#30323dff', '#4d5061ff', '#fe5f55ff', '#fceff9ff', '#f6ca83ff', '#f5d6baff', '#fff', '#000'];
 const borderStyles = ['solid', 'dashed', 'dotted', 'double', 'groove'];
 
 
@@ -69,9 +69,13 @@ export default function Home() {
     "--sunset",        // Warm light yellow
     "--blue-munsell",  // Medium blue
     "--bittersweet",   // Coral red
-    "--lavender-blush" // Pale pink
+    "--lavender-blush", // Pale pink
+    "black",
+    "white"
   ];
   const [clockFontColor, setClockFontColor] = useState(fontColors[0]);
+
+  
 
   const getBoxShadow = useCallback(() => {
     switch (visualEffect) {
@@ -236,17 +240,24 @@ export default function Home() {
             })}
           </div>
           <div className="special-buttons">
-            <button
-              className="settings-button"
-              onClick={() => setShowSettings(!showSettings)}
-              aria-label="Settings"
-              title="Settings"
-            >
-              {settingImage}
-            </button>
-            <button className="fullscreen-button" onClick={toggleFullScreen} aria-label="Toggle fullscreen">
-              ⛶
-            </button>
+          <button
+  className="settings-button"
+  onClick={() => setShowSettings(!showSettings)}
+  aria-label="Settings"
+  title="Settings"
+  style={{ color: `var(${clockFontColor})` }} // Apply dynamic font color
+>
+  {settingImage}
+</button>
+
+<button 
+  className="fullscreen-button" 
+  onClick={toggleFullScreen} 
+  aria-label="Toggle fullscreen" 
+  style={{ color: `var(${clockFontColor})` }} // Apply dynamic font color
+>
+  ⛶
+</button>
           </div>
         </div>
       ) : (
@@ -268,7 +279,11 @@ export default function Home() {
           </button>
 
           <div className="customization-buttons">
-            <button onClick={() => setClockFont(fonts[Math.floor(Math.random() * fonts.length)])} aria-label="Change font">𝖠b</button>
+            <button onClick={() => setClockFont(prev => {
+              const nextIndex = (fonts.indexOf(prev) + 1) % fonts.length;
+              return fonts[nextIndex];
+            })} aria-label="Change font">𝖠b</button>
+
             <button
               onClick={() => setClockShape(prev => prev === 'square' ? 'circle' : 'square')}
               aria-label="Change shape"
@@ -355,7 +370,7 @@ export default function Home() {
                 type="range"
                 id="font-size"
                 min="1"
-                max="4"
+                max="6"
                 step="0.2"
                 value={fontSize}
                 onChange={handleFontSizeChange}
