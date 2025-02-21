@@ -130,32 +130,58 @@ export default function Home() {
   useEffect(() => {
     let touchStartX = 0;
     let touchEndX = 0;
+    let touchStartY = 0;
+    let touchEndY = 0;
+  
+    const clockContainer = document.querySelector(".clock");
+  
+    if (!clockContainer) return;
   
     const handleTouchStart = (e) => {
       touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
     };
   
     const handleTouchMove = (e) => {
       touchEndX = e.touches[0].clientX;
+      touchEndY = e.touches[0].clientY;
     };
   
     const handleTouchEnd = () => {
-      const swipeDistance = touchEndX - touchStartX;
-      if (swipeDistance > 50 || swipeDistance < -50) {
+      const swipeX = touchEndX - touchStartX;
+      const swipeY = touchEndY - touchStartY;
+  
+      // Left or Right swipe → Randomize design
+      if (Math.abs(swipeX) > 50 && Math.abs(swipeX) > Math.abs(swipeY)) {
         generateRandomDesign();
+      }
+  
+      // Upward swipe → Enter fullscreen
+      if (swipeY < -50 && Math.abs(swipeY) > Math.abs(swipeX)) {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen();
+        }
+      }
+  
+      // Downward swipe → Exit fullscreen
+      if (swipeY > 50 && Math.abs(swipeY) > Math.abs(swipeX)) {
+        if (document.fullscreenElement) {
+          document.exitFullscreen();
+        }
       }
     };
   
-    document.addEventListener("touchstart", handleTouchStart);
-    document.addEventListener("touchmove", handleTouchMove);
-    document.addEventListener("touchend", handleTouchEnd);
+    clockContainer.addEventListener("touchstart", handleTouchStart);
+    clockContainer.addEventListener("touchmove", handleTouchMove);
+    clockContainer.addEventListener("touchend", handleTouchEnd);
   
     return () => {
-      document.removeEventListener("touchstart", handleTouchStart);
-      document.removeEventListener("touchmove", handleTouchMove);
-      document.removeEventListener("touchend", handleTouchEnd);
+      clockContainer.removeEventListener("touchstart", handleTouchStart);
+      clockContainer.removeEventListener("touchmove", handleTouchMove);
+      clockContainer.removeEventListener("touchend", handleTouchEnd);
     };
   }, [generateRandomDesign]);
+  
   
 
 
